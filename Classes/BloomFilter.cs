@@ -1,6 +1,6 @@
 using System.Collections;
 
-public abstract class BloomFilter<T>{
+public class BloomFilter<T> : IProbMembership<T>{
     /// <summary>
     /// The bit array that contains the filter
     /// </summary>
@@ -29,8 +29,6 @@ public abstract class BloomFilter<T>{
         // Reference: https://hur.st/bloomfilter/?n=4000&p=1.0E-7&m=&k=
         int numBitsInFilter = (int)Math.Ceiling(numItemsToAddToFilter * Math.Log(falsePositiveRate)/Math.Log(1/Math.Pow(2, Math.Log(2))));
         int numHashFns = (int)Math.Round(numBitsInFilter / numBitsInFilter * Math.Log(2));
-        Console.WriteLine(numBitsInFilter);
-        Console.WriteLine(numHashFns);
         SetupBloomFilter(numHashFns, numBitsInFilter);
     }
 
@@ -45,27 +43,38 @@ public abstract class BloomFilter<T>{
     }
 
     /// <summary>
-    /// Abstract function, gets the indexs of the bits in the filter to check
+    /// Gets the hashed indexs override
     /// </summary>
     /// <param name="toHash">The bytes to hash</param>
     /// <param name="bloomFilterSize">The size of the bloom filter in bits</param>
     /// <param name="numHashFns">The number of hash functions to use</param>
-    /// <returns></returns>
-    protected abstract int[] GetHashedIndexs(byte[] toHash, int bloomFilterSize, int numHashFns);
+    /// <returns>The indexs to check in the bloom filter for the byte array</returns>
+    /// <exception cref="ArgumentNullException">Throws if toHash is null</exception>
+    private int[] GetHashedIndexs(T toHash)
+    {
+        if (toHash == null){
+            throw new ArgumentNullException();
+        }
+
+        int[] indexs = new int[numHashFns];
+        for (int i = 0; i < numHashFns; i++){
+            indexs[i] = (Math.Abs(toHash.GetHashCode()) + i * 20) % bitArray.Length;
+        }
+        return indexs;
+    }
 
     /// <summary>
     /// Adds the object to the bloom filter 
     /// </summary>
     /// <param name="toAdd">The object to add to the filter</param>
     /// <exception cref="ArgumentNullException">Throws if toAdd is null</exception>
-    public void AddToBloomFilter(T toAdd){
+    public void AddToSet(T toAdd){
         if (toAdd == null){
             throw new ArgumentNullException();
         }
 
-        byte[] bytes = BitConverter.GetBytes((dynamic) toAdd);
-        int[] indexsToFlip = GetHashedIndexs(bytes, bitArray.Length, numHashFns);
-        foreach (int index in indexsToFlip){
+        int[] indexsToSet = GetHashedIndexs(toAdd);
+        foreach (int index in indexsToSet){
             bitArray[index] = true;
         }
     }
@@ -76,12 +85,11 @@ public abstract class BloomFilter<T>{
     /// <param name="toCheck">The object to check if it is in the set</param>
     /// <returns>True if the object is in the set false if the object is not in the set</returns>
     /// <exception cref="ArgumentNullException">Throws if toCheck is null</exception>
-    public bool GetErrorProneInSet(T toCheck){
+    public bool ObjectInSet(T toCheck){
         if (toCheck == null){
             throw new ArgumentNullException();
         }
-        byte[] bytes = BitConverter.GetBytes((dynamic) toCheck);
-        int[] indexsToCheck = GetHashedIndexs(bytes, bitArray.Length, numHashFns);
+        int[] indexsToCheck = GetHashedIndexs(toCheck);
         foreach (int index in indexsToCheck){
             if (!bitArray[index]){
                 return false;

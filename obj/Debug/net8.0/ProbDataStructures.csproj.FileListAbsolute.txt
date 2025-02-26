@@ -190,3 +190,4 @@
 /home/ryhime/Desktop/ProbDataStructures/obj/Debug/net8.0/ProbDataStructures.pdb
 /home/ryhime/Desktop/ProbDataStructures/obj/Debug/net8.0/ProbDataStructures.genruntimeconfig.cache
 /home/ryhime/Desktop/ProbDataStructures/obj/Debug/net8.0/ref/ProbDataStructures.dll
+/home/ryhime/Desktop/Programming/ProbDataStructures/obj/Debug/net8.0/ProbDataStructures.sourcelink.json

@@ -1,4 +1,4 @@
-﻿SHA256BloomFilter<int> test = new SHA256BloomFilter<int>(2, 1);
-test.AddToBloomFilter(5);
-Console.WriteLine(test.GetErrorProneInSet(6));
-Console.WriteLine(test.GetErrorProneInSet(5));
+﻿IProbMembership<int> test = new BloomFilter<int>(2, 100);
+test.AddToSet(5);
+Console.WriteLine(test.ObjectInSet(6));
+Console.WriteLine(test.ObjectInSet(5));

@@ -97,4 +97,11 @@ public class BloomFilter<T> : IProbMembership<T>{
         }
         return true;
     }
+
+    /// <summary>
+    /// Clears the objects held in the set
+    /// </summary>
+    public void ClearSet(){
+        bitArray = new BitArray(bitArray.Length);
+    }
 }

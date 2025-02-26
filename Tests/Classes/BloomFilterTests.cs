@@ -44,4 +44,13 @@ public class BloomFilterTests{
         Assert.True(bf.ObjectInSet(bf1));
         Assert.False(bf.ObjectInSet(bf2));
     }
+
+    [Fact]
+    public static void ShouldClearItself(){
+        IProbMembership<int> bf = new BloomFilter<int>(5, 100);
+        bf.AddToSet(5);
+        Assert.True(bf.ObjectInSet(5));
+        bf.ClearSet();
+        Assert.False(bf.ObjectInSet(5));
+    }
 }

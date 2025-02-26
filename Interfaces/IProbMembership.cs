@@ -11,4 +11,9 @@ public interface IProbMembership<T>{
     /// </summary>
     /// <param name="toAdd">The object to add to the set</param>
     public void AddToSet(T toAdd);
+
+    /// <summary>
+    /// Clears the objects held in the set
+    /// </summary>
+    public void ClearSet();
 }

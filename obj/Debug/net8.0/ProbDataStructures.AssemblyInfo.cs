@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProbDataStructures")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+90f05d73cca177baf8c246641316b590583036cd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+164394a0cd220d9e4fafe6abd2e4788d52476bcd")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProbDataStructures")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProbDataStructures")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -28,7 +28,7 @@ public class BloomFilter<T> : IProbMembership<T>{
     public BloomFilter(int numItemsToAddToFilter, float falsePositiveRate){
         // Reference: https://hur.st/bloomfilter/?n=4000&p=1.0E-7&m=&k=
         int numBitsInFilter = (int)Math.Ceiling(numItemsToAddToFilter * Math.Log(falsePositiveRate)/Math.Log(1/Math.Pow(2, Math.Log(2))));
-        int numHashFns = (int)Math.Round(numBitsInFilter / numBitsInFilter * Math.Log(2));
+        int numHashFns = (int)Math.Round((numBitsInFilter / numItemsToAddToFilter) * Math.Log(2));
         SetupBloomFilter(numHashFns, numBitsInFilter);
     }
 

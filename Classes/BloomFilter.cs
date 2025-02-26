@@ -43,7 +43,7 @@ public class BloomFilter<T> : IProbMembership<T>{
     }
 
     /// <summary>
-    /// Gets the hashed indexs override
+    /// Gets the hashed indexs
     /// </summary>
     /// <param name="toHash">The bytes to hash</param>
     /// <param name="bloomFilterSize">The size of the bloom filter in bits</param>
@@ -69,10 +69,6 @@ public class BloomFilter<T> : IProbMembership<T>{
     /// <param name="toAdd">The object to add to the filter</param>
     /// <exception cref="ArgumentNullException">Throws if toAdd is null</exception>
     public void AddToSet(T toAdd){
-        if (toAdd == null){
-            throw new ArgumentNullException();
-        }
-
         int[] indexsToSet = GetHashedIndexs(toAdd);
         foreach (int index in indexsToSet){
             bitArray[index] = true;
@@ -86,9 +82,6 @@ public class BloomFilter<T> : IProbMembership<T>{
     /// <returns>True if the object is in the set false if the object is not in the set</returns>
     /// <exception cref="ArgumentNullException">Throws if toCheck is null</exception>
     public bool ObjectInSet(T toCheck){
-        if (toCheck == null){
-            throw new ArgumentNullException();
-        }
         int[] indexsToCheck = GetHashedIndexs(toCheck);
         foreach (int index in indexsToCheck){
             if (!bitArray[index]){

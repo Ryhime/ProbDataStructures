@@ -1,4 +1,3 @@
-﻿IProbMembership<int> test = new BloomFilter<int>(2, 100);
-test.AddToSet(5);
-Console.WriteLine(test.ObjectInSet(6));
-Console.WriteLine(test.ObjectInSet(5));
+﻿IProbMembership<int> bf = new CuckooFilter<int>(1, 1);
+bf.AddToSet(5);
+bf.AddToSet(6);

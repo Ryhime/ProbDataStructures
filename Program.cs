@@ -1,3 +1,3 @@
-﻿IProbMembership<int> bf = new CuckooFilter<int>(1, 1);
-bf.AddToSet(5);
-bf.AddToSet(6);
+﻿using BenchmarkDotNet.Running;
+
+var summary = BenchmarkRunner.Run<MembershipBenchmarks>();

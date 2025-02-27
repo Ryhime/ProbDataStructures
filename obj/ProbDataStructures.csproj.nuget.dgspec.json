@@ -43,6 +43,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BenchmarkDotNet": {
+              "target": "Package",
+              "version": "[0.14.0, )"
+            },
             "Microsoft.NET.Test.sdk": {
               "target": "Package",
               "version": "[17.13.0, )"

@@ -71,7 +71,7 @@ public class BloomFilter<T> : IProbMembership<T>{
     public void AddToSet(T toAdd){
         int[] indexsToSet = GetHashedIndexs(toAdd);
         foreach (int index in indexsToSet){
-            bitArray[index] = true;
+            bitArray.Set(index, true);
         }
     }
 
@@ -84,7 +84,7 @@ public class BloomFilter<T> : IProbMembership<T>{
     public bool ObjectInSet(T toCheck){
         int[] indexsToCheck = GetHashedIndexs(toCheck);
         foreach (int index in indexsToCheck){
-            if (!bitArray[index]){
+            if (!bitArray.Get(index)){
                 return false;
             }
         }

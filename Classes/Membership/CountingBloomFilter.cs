@@ -3,7 +3,7 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// <summary>
     /// The counter filter
     /// </summary>
-    private int[] counters = new int[1];
+    private byte[] counters = new byte[1];
 
     /// <summary>
     /// The number of hash functions to use
@@ -37,7 +37,7 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// <param name="numHashFns">The number of hash functions to use</param>
     /// <param name="numCounters">The number of counters to use in the filter</param>
     private void SetupCountingBloomFilter(int numHashFns, int numCounters){
-        counters = new int[numCounters];
+        counters = new byte[numCounters];
         this.numHashFns = numHashFns;
     }
 
@@ -47,7 +47,16 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// <param name="toAdd">The object to add</param>
     public void AddToSet(T toAdd)
     {
-        int[] indexs = GetHashedIndexs(toAdd);
+        if (null == toAdd){
+            throw new ArgumentNullException();
+        }
+
+        Span<int> indexs = stackalloc int[numHashFns];
+
+        for (int i = 0; i < numHashFns; i++){
+            indexs[i] = (Math.Abs(toAdd.GetHashCode()) + i * 20) % counters.Length;
+        }
+
         foreach (int index in indexs){
             counters[index]++;
         }
@@ -58,7 +67,15 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// </summary>
     /// <param name="toRemove">The object to remove from the set</param>
     public void RemoveFromSet(T toRemove){
-        int[] indexs = GetHashedIndexs(toRemove);
+        if (null == toRemove){
+            throw new ArgumentNullException();
+        }
+
+        Span<int> indexs = stackalloc int[numHashFns];
+        for (int i = 0; i < numHashFns; i++){
+            indexs[i] = (Math.Abs(toRemove.GetHashCode()) + i * 20) % counters.Length;
+        }
+
         foreach (int index in indexs){
             if (counters[index] > 0){
                 counters[index]--;
@@ -67,32 +84,11 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     }
 
     /// <summary>
-    /// Gets the hashed indexs
-    /// </summary>
-    /// <param name="toHash">The bytes to hash</param>
-    /// <param name="bloomFilterSize">The size of the bloom filter in bits</param>
-    /// <param name="numHashFns">The number of hash functions to use</param>
-    /// <returns>The indexs to check in the bloom filter for the byte array</returns>
-    /// <exception cref="ArgumentNullException">Throws if toHash is null</exception>
-    private int[] GetHashedIndexs(T toHash)
-    {
-        if (toHash == null){
-            throw new ArgumentNullException();
-        }
-
-        int[] indexs = new int[numHashFns];
-        for (int i = 0; i < numHashFns; i++){
-            indexs[i] = (Math.Abs(toHash.GetHashCode()) + i * 20) % counters.Length;
-        }
-        return indexs;
-    }
-
-    /// <summary>
     /// Removes all the objects from the set
     /// </summary>
     public void ClearSet()
     {
-        counters = new int[counters.Length];
+        counters = new byte[counters.Length];
     }
 
     /// <summary>
@@ -102,7 +98,16 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// <returns>If the object is in the set</returns>
     public bool ObjectInSet(T toCheck)
     {
-        int[] indexs = GetHashedIndexs(toCheck);
+        if (null == toCheck){
+            throw new ArgumentNullException();
+        }
+
+        Span<int> indexs = stackalloc int[numHashFns];
+
+        for (int i = 0; i < numHashFns; i++){
+            indexs[i] = (Math.Abs(toCheck.GetHashCode()) + i * 20) % counters.Length;
+        }
+
         foreach (int index in indexs){
             if (counters[index] <= 0) {
                 return false;

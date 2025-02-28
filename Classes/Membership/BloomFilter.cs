@@ -43,34 +43,21 @@ public class BloomFilter<T> : IProbMembership<T>{
     }
 
     /// <summary>
-    /// Gets the hashed indexs
-    /// </summary>
-    /// <param name="toHash">The bytes to hash</param>
-    /// <param name="bloomFilterSize">The size of the bloom filter in bits</param>
-    /// <param name="numHashFns">The number of hash functions to use</param>
-    /// <returns>The indexs to check in the bloom filter for the byte array</returns>
-    /// <exception cref="ArgumentNullException">Throws if toHash is null</exception>
-    private int[] GetHashedIndexs(T toHash)
-    {
-        if (toHash == null){
-            throw new ArgumentNullException();
-        }
-
-        int[] indexs = new int[numHashFns];
-        for (int i = 0; i < numHashFns; i++){
-            indexs[i] = (Math.Abs(toHash.GetHashCode()) + i * 20) % bitArray.Length;
-        }
-        return indexs;
-    }
-
-    /// <summary>
-    /// Adds the object to the bloom filter 
+    /// Adds the object to the bloom filter
     /// </summary>
     /// <param name="toAdd">The object to add to the filter</param>
     /// <exception cref="ArgumentNullException">Throws if toAdd is null</exception>
     public void AddToSet(T toAdd){
-        int[] indexsToSet = GetHashedIndexs(toAdd);
-        foreach (int index in indexsToSet){
+        if (null == toAdd){
+            throw new ArgumentException();
+        }
+
+        Span<int> indexsToSet = stackalloc int[numHashFns];
+        for (int i = 0; i < numHashFns; i++){
+            indexsToSet[i] = (Math.Abs(toAdd.GetHashCode()) + i * 20) % bitArray.Length;
+        }
+
+        foreach (int index in indexsToSet) {
             bitArray.Set(index, true);
         }
     }
@@ -82,7 +69,15 @@ public class BloomFilter<T> : IProbMembership<T>{
     /// <returns>True if the object is in the set false if the object is not in the set</returns>
     /// <exception cref="ArgumentNullException">Throws if toCheck is null</exception>
     public bool ObjectInSet(T toCheck){
-        int[] indexsToCheck = GetHashedIndexs(toCheck);
+        if (null == toCheck){
+            throw new ArgumentNullException();
+        }
+
+        Span<int> indexsToCheck = stackalloc int[numHashFns];
+        for (int i = 0; i < numHashFns; i++){
+            indexsToCheck[i] = (Math.Abs(toCheck.GetHashCode()) + i * 20) % bitArray.Length;
+        }
+
         foreach (int index in indexsToCheck){
             if (!bitArray.Get(index)){
                 return false;

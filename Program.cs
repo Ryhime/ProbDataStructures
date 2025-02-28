@@ -1,3 +1,3 @@
 ﻿using BenchmarkDotNet.Running;
 
-//var summary = BenchmarkRunner.Run<MembershipBenchmarks>();
+var summary = BenchmarkRunner.Run<MembershipBenchmarks>();

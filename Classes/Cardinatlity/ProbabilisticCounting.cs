@@ -6,6 +6,13 @@ public class ProbabilisticCounting<T> : ICardinality<T>
     /// The counters to use in the set
     /// </summary>
     List<BitArray> counters;
+
+    /// <summary>
+    /// The size of each counter
+    /// </summary>
+    int counterSize;
+
+
     /// <summary>
     /// A constant phi value given from the book used to calculate cardinality
     /// </summary>
@@ -15,10 +22,15 @@ public class ProbabilisticCounting<T> : ICardinality<T>
     /// Default Constructor
     /// </summary>
     /// <param name="numCounters">The number of counters to use</param>
-    public ProbabilisticCounting(int numCounters){
+    public ProbabilisticCounting(int numCounters, int counterSize){
+        if (numCounters <= 0 || counterSize <= 0){
+            throw new ArgumentException();
+        }
+
+        this.counterSize = counterSize;
         counters = new List<BitArray>(numCounters);
         for (int i = 0; i < numCounters; i++){
-            counters.Add(new BitArray(numCounters));
+            counters.Add(new BitArray(counterSize));
         }
     }
 
@@ -34,7 +46,7 @@ public class ProbabilisticCounting<T> : ICardinality<T>
             return 0;
         }
         
-        return index % counters.Count;
+        return index % counterSize;
     }
 
     /// <summary>
@@ -60,10 +72,9 @@ public class ProbabilisticCounting<T> : ICardinality<T>
     /// </summary>
     public void ClearSet()
     {
-        int size = counters.Count;
-        counters = new List<BitArray>(size);
-        for (int i = 0; i < size; i++){
-            counters.Add(new BitArray(size));
+        counters = new List<BitArray>(counters.Count);
+        for (int i = 0; i < counterSize; i++){
+            counters.Add(new BitArray(counterSize));
         }
     }
 

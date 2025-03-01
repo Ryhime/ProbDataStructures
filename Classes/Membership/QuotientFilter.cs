@@ -19,6 +19,10 @@ public class QuotientFilter<T> : IProbMembership<T>
     /// <param name="numBuckets">The number of buckets in the cache</param>
     /// <param name="bucketSize">The number of elements each bucket can hold</param>
     public QuotientFilter(int numBuckets, int bucketSize){
+        if (0 == numBuckets || 0 == bucketSize){
+            throw new ArgumentException();
+        }
+
         this.numBuckets = numBuckets;
         this.bucketSize = bucketSize;
 

@@ -38,6 +38,10 @@ public class BloomFilter<T> : IProbMembership<T>{
     /// <param name="numHashFns">The number of hash functions</param>
     /// <param name="numBitsInFilter">The number of bits in the filter</param>
     private void SetupBloomFilter(int numHashFns, int numBitsInFilter){
+        if (numHashFns <= 0 || numBitsInFilter == 0){
+            throw new ArgumentException();
+        }
+        
         bitArray = new BitArray(numBitsInFilter);
         this.numHashFns = numHashFns;
     }

@@ -37,6 +37,10 @@ public class CountingBloomFilter<T> : IProbMembership<T>
     /// <param name="numHashFns">The number of hash functions to use</param>
     /// <param name="numCounters">The number of counters to use in the filter</param>
     private void SetupCountingBloomFilter(int numHashFns, int numCounters){
+        if (0 == numHashFns || 0 == numCounters){
+            throw new ArgumentException();
+        }
+        
         counters = new byte[numCounters];
         this.numHashFns = numHashFns;
     }

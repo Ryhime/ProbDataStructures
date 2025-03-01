@@ -12,6 +12,10 @@ public class LinearCounting<T> : ICardinality<T>
     /// </summary>
     /// <param name="numFilterBits">The number of bits in the filter</param>
     public LinearCounting(int numFilterBits){
+        if (numFilterBits <= 0){
+            throw new ArgumentException();
+        }
+
         bits = new BitArray(numFilterBits);
     }
 

@@ -26,6 +26,10 @@ public class CuckooFilter<T> : IProbMembership<T>
     /// <param name="bucketCapacity">The capacity of each bucket</param>
     /// <param name="numBuckets">The number of buckets</param>
     public CuckooFilter(int numBuckets, int bucketCapacity){
+        if (0 == numBuckets || 0 == bucketCapacity){
+            throw new ArgumentException();
+        }
+
         this.bucketCapacity = bucketCapacity;
         this.numBuckets = numBuckets;
         rand = new Random();
